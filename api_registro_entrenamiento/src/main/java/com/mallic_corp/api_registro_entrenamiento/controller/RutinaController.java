@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mallic_corp.api_registro_entrenamiento.entity.RutinaEntity;
 import com.mallic_corp.api_registro_entrenamiento.model.Rutina;
+import com.mallic_corp.api_registro_entrenamiento.model.RutinaCrear;
 import com.mallic_corp.api_registro_entrenamiento.repository.RutinasRepository;
 
 
@@ -23,20 +24,21 @@ public class RutinaController {
     public List <Rutina> optenerTodas(){
         var rutinas = rutinaRepository.findAll();
 
-        return rutinas.stream().map((e)->new Rutina (e.getNombre(),e.getDescripcion())).toList();
+        return rutinas.stream().map((e)->new Rutina (e.getId(), e.getNombre(), e.getDescripcion())).toList();
     }
 
     @PostMapping
-    public Rutina crearRutina (@RequestBody Rutina rutina) {
+    public Rutina crearRutina (@RequestBody RutinaCrear rutina) {
 
         var entity =new RutinaEntity();
+
         entity.setNombre (rutina.titulo());
         entity.setDescripcion (rutina.descripcion());
 
         rutinaRepository.save(entity);
 
         System.out.println(entity);
-        return rutina;
+        return new Rutina(entity.getId(), entity.getNombre(), entity.getDescripcion());
     }
     
 
